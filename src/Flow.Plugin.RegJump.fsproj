@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <AssemblyName>Flow.Plugin.RegJump</AssemblyName>
+    <PackageId>Flow.Plugin.RegJump</PackageId>
+    <Authors>Ioannis G. (@JohnTheGr8)</Authors>
+    <PackageProjectUrl>https://github.com/JohnTheGr8/Flow.Plugin.RegJump</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/JohnTheGr8/Flow.Plugin.RegJump</RepositoryUrl>
+    <PackageTags>flow-launcher flow-plugin</PackageTags>
+    <Version>1.0.0</Version>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Flow.Launcher.Plugin" Version="4.0.1" />
+  </ItemGroup>
+</Project>
