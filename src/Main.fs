@@ -1,8 +1,5 @@
 namespace Flow.Plugin.RegJump
 
-open Flow.Launcher.Plugin
-open System.Collections.Generic
-
 type RegQueryResult =
     | ExistingKey of RegPath
     | NonExistingKey of string
@@ -65,10 +62,40 @@ module Registry =
         | None ->
             InvalidKey
 
+open Flow.Launcher.Plugin
+open Flow.Launcher.Plugin.SharedCommands
+open System.Collections.Generic
+open System.Diagnostics
 
 type RegJumpPlugin() =
 
     let mutable pluginContext = PluginInitContext()
+
+    let regJump (key : RegKey) =
+        try
+            do ProcessStartInfo(
+                    FileName = "regjump.exe",
+                    Verb = "runas",
+                    UseShellExecute = true,
+                    CreateNoWindow = true,
+                    Arguments = key.KeyFullPath
+                )
+            |> ShellCommand.Execute
+        with _ ->
+            ()
+
+        true
+
+    let changeQuery (key : RegKey) =
+        do pluginContext.API.ChangeQuery $"{pluginContext.CurrentPluginMetadata.ActionKeyword} {key.KeyFullPath}"
+
+        false
+
+    let jumpOrChangeQuery (key : RegKey) (ctx : ActionContext) =
+        if ctx.SpecialKeyState.CtrlPressed then
+            regJump key
+        else
+            changeQuery key
 
     interface IPlugin with
         member this.Init (context: PluginInitContext) =
@@ -83,13 +110,15 @@ type RegJumpPlugin() =
                             Title = details.Key.KeyFullPath,
                             SubTitle = details.Key.KeyFullPath,
                             IcoPath = "icon.png",
-                            Score = 1000
+                            Score = 1000,
+                            Action = fun _ -> regJump details.Key
                         )
                         for subKey in details.SubKeys do
                             Result (
                                 Title = $"sub key: {subKey.KeyName}",
                                 SubTitle = subKey.KeyFullPath,
-                                IcoPath = "icon.png"
+                                IcoPath = "icon.png",
+                                Action = jumpOrChangeQuery subKey
                             )
                     ]
                 | NonExistingKey keyPath ->
@@ -113,7 +142,8 @@ type RegJumpPlugin() =
                         Result (
                             Title = hiveKey.KeyName,
                             SubTitle = hiveKey.KeyFullPath,
-                            IcoPath = "icon.png"
+                            IcoPath = "icon.png",
+                            Action = jumpOrChangeQuery hiveKey
                         )
                     ]
 
