@@ -7,10 +7,10 @@ environment:
 
 before_build:
     - ps: dotnet --info
-    - ps: dotnet restore
+    - ps: dotnet restore src
 
 build_script:
-    - ps: dotnet pack -c Release
+    - ps: dotnet pack -c Release src
 
 after_build:
 - ps: >-
