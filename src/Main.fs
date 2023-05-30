@@ -110,6 +110,8 @@ type RegJumpPlugin() =
                             Title = details.Key.KeyFullPath,
                             SubTitle = details.Key.KeyFullPath,
                             IcoPath = "icon.png",
+                            AutoCompleteText = $"{pluginContext.CurrentPluginMetadata.ActionKeyword} {details.Key.KeyFullPath}",
+                            CopyText = details.Key.KeyFullPath,
                             Score = 1000,
                             Action = fun _ -> regJump details.Key
                         )
@@ -118,6 +120,8 @@ type RegJumpPlugin() =
                                 Title = $"sub key: {subKey.KeyName}",
                                 SubTitle = subKey.KeyFullPath,
                                 IcoPath = "icon.png",
+                                AutoCompleteText = $"{pluginContext.CurrentPluginMetadata.ActionKeyword} {subKey.KeyFullPath}",
+                                CopyText = subKey.KeyFullPath,
                                 Action = jumpOrChangeQuery subKey
                             )
                     ]
@@ -143,6 +147,7 @@ type RegJumpPlugin() =
                             Title = hiveKey.KeyName,
                             SubTitle = hiveKey.KeyFullPath,
                             IcoPath = "icon.png",
+                            AutoCompleteText = $"{pluginContext.CurrentPluginMetadata.ActionKeyword} {hiveKey.KeyFullPath}",
                             Action = jumpOrChangeQuery hiveKey
                         )
                     ]
